@@ -8,4 +8,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Создание задачи
 Route::post('/tasks', [TaskController::class, 'store']);
+
+// Чтение всех задач
+Route::get('/tasks', [TaskController::class, 'index']);
+
+// Чтение одной задачи по id
+Route::get('/tasks/{task}', [TaskController::class, 'show']);
