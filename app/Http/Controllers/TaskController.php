@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 
 class TaskController extends Controller
@@ -19,7 +20,7 @@ class TaskController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'data'      => $task
+            'data'      => new TaskResource($task)
         ], 201);
     }
 
@@ -38,6 +39,26 @@ class TaskController extends Controller
         return response()->json([
             'status'    => 'success',
             'data'      => new TaskResource($task)
+        ]);
+    }
+
+    public function update(UpdateTaskRequest $request, Task $task)
+    {
+        $task->update($request->validated());
+
+        return response()->json([
+            'status'    => 'success',
+            'data'      => new TaskResource($task)
+        ]);
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Задача удалена'
         ]);
     }
 }

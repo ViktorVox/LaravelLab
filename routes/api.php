@@ -16,3 +16,9 @@ Route::get('/tasks', [TaskController::class, 'index']);
 
 // Чтение одной задачи по id
 Route::get('/tasks/{task}', [TaskController::class, 'show']);
+
+// Обновление задачи по id
+Route::put('/tasks/{task}', [TaskController::class, 'update']);
+
+// Удаление задачи по id
+Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
