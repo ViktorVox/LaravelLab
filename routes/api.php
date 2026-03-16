@@ -6,32 +6,32 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);              // Регистрация
-Route::post('/login', [AuthController::class, 'login']);                    // Вход
+Route::post('/register', [AuthController::class, 'register']);                  // Регистрация
+Route::post('/login', [AuthController::class, 'login']);                        // Вход
 
 // Защищенные маршруты
 Route::middleware('auth:sanctum')->group(function () {
     // Маршруты задач
-    Route::post('/tasks', [TaskController::class, 'store']);                // Создание задачи
-    Route::get('/tasks', [TaskController::class, 'index']);                 // Чтение всех задач
-    Route::get('/tasks/{task}', [TaskController::class, 'show']);           // Чтение одной задачи по id
-    Route::put('/tasks/{task}', [TaskController::class, 'update']);         // Обновление задачи по id
-    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);     // Удаление задачи по id
+    Route::post('/tasks', [TaskController::class, 'store']);                    // Создание задачи
+    Route::get('/tasks', [TaskController::class, 'index']);                     // Чтение всех задач
+    Route::get('/tasks/{task}', [TaskController::class, 'show']);               // Чтение одной задачи по id
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);             // Обновление задачи по id
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);         // Удаление задачи по id
+
+    // Маршруты кинг
+    Route::post('/books', [BookController::class, 'store']);                    // Создание книги
+    Route::get('/books', [BookController::class, 'index']);                     // Информация о всех книгах
+    Route::get('/books/{book}', [BookController::class, 'show']);               // Информация о книге по id
+    Route::put('/books/{book}', [BookController::class, 'update']);             // Обновление информации о книге по id
+    Route::delete('/books/{book}', [BookController::class, 'destroy']);         // Удаление книги по id
+
+    // Маршруты авторов
+    Route::post('/authors', [AuthorController::class, 'store']);                // Создание автора
+    Route::get('/authors', [AuthorController::class, 'index']);                 // Информация о всех авторах
+    Route::get('/authors/{author}', [AuthorController::class, 'show']);         // Информация об авторе по id
+    Route::put('/authors/{author}', [AuthorController::class, 'update']);       // Обновление информации об авторе по id
+    Route::delete('/authors/{author}', [AuthorController::class, 'destroy']);   // Удаление автора и его книг по id
 
     // Аутенфикация
-    Route::post('/logout', [AuthController::class, 'logout']);              // Выход с аккаунта
+    Route::post('/logout', [AuthController::class, 'logout']);                  // Выход с аккаунта
 });
-
-// Маршруты кинг
-Route::post('/books', [BookController::class, 'store']);                    // Создание книги
-Route::get('/books', [BookController::class, 'index']);                     // Информация о всех книгах
-Route::get('/books/{book}', [BookController::class, 'show']);               // Информация о книге по id
-Route::put('/books/{book}', [BookController::class, 'update']);             // Обновление информации о книге по id
-Route::delete('/books/{book}', [BookController::class, 'destroy']);         // Удаление книги по id
-
-// Маршруты авторов
-Route::post('/authors', [AuthorController::class, 'store']);                // Создание автора
-Route::get('/authors', [AuthorController::class, 'index']);                 // Информация о всех авторах
-Route::get('/authors/{author}', [AuthorController::class, 'show']);         // Информация об авторе по id
-Route::put('/authors/{author}', [AuthorController::class, 'update']);        // Обновление информации об авторе по id
-Route::delete('/author/{author}', [AuthorController::class, 'destroy']);     // Удаление автора и его книг по id
