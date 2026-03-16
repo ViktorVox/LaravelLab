@@ -57,7 +57,7 @@ class AuthorController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'message'   => 'Автор удалён'
+            'message'   => 'Автор и его книги удалены'
         ]);
     }
 }

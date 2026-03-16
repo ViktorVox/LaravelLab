@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
@@ -24,11 +23,15 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Маршруты кинг
-Route::post('/books', [BookController::class, 'store']);
+Route::post('/books', [BookController::class, 'store']);                    // Создание книги
+Route::get('/books', [BookController::class, 'index']);                     // Информация о всех книгах
+Route::get('/books/{book}', [BookController::class, 'show']);               // Информация о книге по id
+Route::put('/books/{book}', [BookController::class, 'update']);             // Обновление информации о книге по id
+Route::delete('/books/{book}', [BookController::class, 'destroy']);         // Удаление книги по id
 
 // Маршруты авторов
 Route::post('/authors', [AuthorController::class, 'store']);                // Создание автора
-Route::get('authors', [AuthorController::class, 'index']);                  // Информация о всех авторах
+Route::get('/authors', [AuthorController::class, 'index']);                 // Информация о всех авторах
 Route::get('/authors/{author}', [AuthorController::class, 'show']);         // Информация об авторе по id
-Route::put('authors/{author}', [AuthorController::class, 'update']);        // Обновление информации об авторе по id
-Route::delete('author/{author}', [AuthorController::class, 'destroy']);     // Удаление автора по id
+Route::put('/authors/{author}', [AuthorController::class, 'update']);        // Обновление информации об авторе по id
+Route::delete('/author/{author}', [AuthorController::class, 'destroy']);     // Удаление автора и его книг по id
