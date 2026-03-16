@@ -3,20 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAuthorRequest;
+use App\Http\Requests\UpdateAuthorRequest;
 use App\Http\Resources\AuthorResource;
 use App\Models\Author;
-use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
     public function index()
     {
-        //
-    }
+        $authors = Author::with('books')->get();
 
-    public function create()
-    {
-        //
+        return response()->json([
+            'status'    => 'success',
+            'data'      => AuthorResource::collection($authors)
+        ]);
     }
 
     public function store(StoreAuthorRequest $request)
@@ -41,18 +41,23 @@ class AuthorController extends Controller
         ]);
     }
 
-    public function edit(Author $author)
+    public function update(UpdateAuthorRequest $request, Author $author)
     {
-        //
-    }
+        $author->update($request->validated());
 
-    public function update(Request $request, Author $author)
-    {
-        //
+        return response()->json([
+            'status'    => 'success',
+            'data'      => new AuthorResource($author)
+        ]);
     }
 
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Автор удалён'
+        ]);
     }
 }

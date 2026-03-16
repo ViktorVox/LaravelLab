@@ -7,38 +7,28 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-// Регистрация
-Route::post('/register', [AuthController::class, 'register']);
-
-// Вход
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);              // Регистрация
+Route::post('/login', [AuthController::class, 'login']);                    // Вход
 
 // Защищенные маршруты
 Route::middleware('auth:sanctum')->group(function () {
-    // Создание задачи
-    Route::post('/tasks', [TaskController::class, 'store']);
+    // Маршруты задач
+    Route::post('/tasks', [TaskController::class, 'store']);                // Создание задачи
+    Route::get('/tasks', [TaskController::class, 'index']);                 // Чтение всех задач
+    Route::get('/tasks/{task}', [TaskController::class, 'show']);           // Чтение одной задачи по id
+    Route::put('/tasks/{task}', [TaskController::class, 'update']);         // Обновление задачи по id
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);     // Удаление задачи по id
 
-    // Чтение всех задач
-    Route::get('/tasks', [TaskController::class, 'index']);
-
-    // Чтение одной задачи по id
-    Route::get('/tasks/{task}', [TaskController::class, 'show']);
-
-    // Обновление задачи по id
-    Route::put('/tasks/{task}', [TaskController::class, 'update']);
-
-    // Удаление задачи по id
-    Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
-
-    // Выход с аккаунта
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Аутенфикация
+    Route::post('/logout', [AuthController::class, 'logout']);              // Выход с аккаунта
 });
 
-// Создание автора
-Route::post('/authors', [AuthorController::class, 'store']);
-
-// Создание книги
+// Маршруты кинг
 Route::post('/books', [BookController::class, 'store']);
 
-// Просмотр автора
-Route::get('/authors/{author}', [AuthorController::class, 'show']);
+// Маршруты авторов
+Route::post('/authors', [AuthorController::class, 'store']);                // Создание автора
+Route::get('authors', [AuthorController::class, 'index']);                  // Информация о всех авторах
+Route::get('/authors/{author}', [AuthorController::class, 'show']);         // Информация об авторе по id
+Route::put('authors/{author}', [AuthorController::class, 'update']);        // Обновление информации об авторе по id
+Route::delete('author/{author}', [AuthorController::class, 'destroy']);     // Удаление автора по id
