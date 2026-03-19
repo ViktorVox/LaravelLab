@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // CRM: Админская часть
     Route::middleware('admin')->group(function () {
         Route::get('/tickets', [TicketController::class, 'index']);                     // Посмотреть ВСЕ заявки
-        Route::patch('/tickets/{ticket}/status', [TicketController::class, 'update']);  // Изменить статус
+        Route::patch('/tickets/{ticket}/status', [TicketController::class, 'updateStatus']);  // Изменить статус
     });
 
 });

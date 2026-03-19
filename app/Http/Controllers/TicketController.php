@@ -3,46 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ticket;
+use App\Http\Requests\StoreTicketRequest;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Клиент: Создать заявку
+    public function store(StoreTicketRequest $request)
+    {
+        $ticket = $request->user()->tickets()->create([
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'status'  => 'new',     // По умолчанию новая
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $ticket
+        ], 201);
+    }
+
+    // Клиент: Посмотреть СВОИ заявки
+    public function userTickets(Request $request)
+    {
+        // Получаем только те заявки, которые принадлежат текущему юзеру
+        $tickets = $request->user()->tickets()->latest()->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $tickets
+        ]);
+    }
+
+    // Админ: Посмотреть ВСЕ заявки
     public function index()
     {
-        return response()->json('Привет, Админ!');
+        // Не забываем жадную загрузку (with), чтобы сразу получить инфу о создателе
+        $tickets = Ticket::with('user:id,name,email')->latest()->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data'   => $tickets
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Админ: Изменить статус заявки
+    public function updateStatus(Request $request, Ticket $ticket)
     {
-        //
-    }
+        $request->validate([
+            'status' => 'required|in:new,in_progress,resolved' // Жестко ограничиваем статусы
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $ticket->update(['status' => $request->status]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Статус заявки обновлен!',
+            'data'    => $ticket
+        ]);
     }
 }
