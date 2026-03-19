@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Support\Facades\Http;
+use App\Jobs\ParsePostsJob;
 
 class ParserController extends Controller
 {   
@@ -19,20 +19,7 @@ class ParserController extends Controller
 
     public function fetchPosts()
     {
-        $response = Http::get('https://jsonplaceholder.typicode.com/posts');
-        $posts = $response->json();
-
-        $topPosts = collect($posts)->take(10);
-
-        foreach ($topPosts as $post) {
-            Post::updateOrCreate(
-                ['external_id' => $post['id']],
-                [
-                    'title' => $post['title'],
-                    'body'  => $post['body']
-                ]
-            );
-        }
+        ParsePostsJob::dispatch();
 
         return response()->json([
             'status'    => 'success',
