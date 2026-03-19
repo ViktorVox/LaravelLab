@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\ParserController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Аутенфикация
     Route::post('/logout', [AuthController::class, 'logout']);                  // Выход с аккаунта
+
+    // Парсер постов
+    Route::post('/parser/posts', [ParserController::class, 'fetchPosts']);      // Подгрузить посты
+    Route::get('/parser/posts', [ParserController::class, 'showPosts']);        // Показать посты
 });
