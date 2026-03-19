@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\ParserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);                  // Регистрация
@@ -39,4 +40,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Парсер постов
     Route::post('/parser/posts', [ParserController::class, 'fetchPosts']);      // Подгрузить посты
     Route::get('/parser/posts', [ParserController::class, 'showPosts']);        // Показать посты
+
+    // CRM: Клиентская часть
+    Route::post('/tickets', [TicketController::class, 'store']);                // Создать заявку
+    Route::get('/tickets/my', [TicketController::class, 'userTickets']);        // Посмотреть СВОИ заявки
+    
+    // CRM: Админская часть
+    Route::middleware('admin')->group(function () {
+        Route::get('/tickets', [TicketController::class, 'index']);                     // Посмотреть ВСЕ заявки
+        Route::patch('/tickets/{ticket}/status', [TicketController::class, 'update']);  // Изменить статус
+    });
+
 });
