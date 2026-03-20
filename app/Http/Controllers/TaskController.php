@@ -13,10 +13,13 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         // Берем ТОЛЬКО те данные, которые прошли валидацию
-        $validateData = $request->validated();
+        $validatedData = $request->validated();
+
+        // Добавляем ID текущего пользователя из токена
+        $validatedData['user_id'] = $request->user()->id;
 
         // Передаем валидированные данные в create
-        $task = Task::create($validateData);
+        $task = Task::create($validatedData);
 
         return response()->json([
             'status'    => 'success',
