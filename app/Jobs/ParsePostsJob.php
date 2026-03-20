@@ -12,17 +12,11 @@ class ParsePostsJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct()
     {
         //
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         $response = Http::get('https://jsonplaceholder.typicode.com/posts');
