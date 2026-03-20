@@ -13,6 +13,9 @@ Route::post('/login', [AuthController::class, 'login']);                        
 
 // Защищенные маршруты
 Route::middleware('auth:sanctum')->group(function () {
+    // Аутенфикация
+    Route::post('/logout', [AuthController::class, 'logout']);                  // Выход с аккаунта
+
     // Маршруты задач
     Route::post('/tasks', [TaskController::class, 'store']);                    // Создание задачи
     Route::get('/tasks', [TaskController::class, 'index']);                     // Чтение всех задач
@@ -33,9 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/authors/{author}', [AuthorController::class, 'show']);         // Информация об авторе по id
     Route::put('/authors/{author}', [AuthorController::class, 'update']);       // Обновление информации об авторе по id
     Route::delete('/authors/{author}', [AuthorController::class, 'destroy']);   // Удаление автора и его книг по id
-
-    // Аутенфикация
-    Route::post('/logout', [AuthController::class, 'logout']);                  // Выход с аккаунта
 
     // Парсер постов
     Route::post('/parser/posts', [ParserController::class, 'fetchPosts']);      // Подгрузить посты
