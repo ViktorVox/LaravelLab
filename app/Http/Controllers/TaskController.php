@@ -27,9 +27,9 @@ class TaskController extends Controller
         ], 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        $tasks = Task::where('user_id', $request->user()->id)->latest()->get();
 
         return response()->json([
             'status'    => 'success',
@@ -37,8 +37,12 @@ class TaskController extends Controller
         ]);
     }
 
-    public function show(Task $task)
+    public function show(Request $request, Task $task)
     {
+        if ($task->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Доступ запрещен'], 403);
+        }
+
         return response()->json([
             'status'    => 'success',
             'data'      => new TaskResource($task)
@@ -47,6 +51,10 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        if ($task->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Доступ запрещен'], 403);
+        }
+
         $task->update($request->validated());
 
         return response()->json([
@@ -55,8 +63,12 @@ class TaskController extends Controller
         ]);
     }
 
-    public function destroy(Task $task)
+    public function destroy(Request $request, Task $task)
     {
+        if ($task->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'Доступ запрещен'], 403);
+        }
+
         $task->delete();
 
         return response()->json([
