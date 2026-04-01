@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
+use App\Http\Resources\TicketResource;
 
 class TicketController extends Controller
 {
@@ -27,11 +28,10 @@ class TicketController extends Controller
     public function userTickets(Request $request)
     {
         // Получаем только те заявки, которые принадлежат текущему юзеру
-        $tickets = $request->user()->tickets()->latest()->get();
+        $tickets = $request->user()->tickets()->latest()->paginate(15);
 
-        return response()->json([
-            'status' => 'success',
-            'data'   => $tickets
+        return TicketResource::collection($tickets)->additional([
+            'status' => 'success'
         ]);
     }
 
@@ -39,11 +39,10 @@ class TicketController extends Controller
     public function index()
     {
         // Не забываем жадную загрузку (with), чтобы сразу получить инфу о создателе
-        $tickets = Ticket::with('user:id,name,email')->latest()->get();
+        $tickets = Ticket::with('user:id,name,email')->latest()->paginate(15);
 
-        return response()->json([
-            'status' => 'success',
-            'data'   => $tickets
+        return TicketResource::collection($tickets)->additional([
+            'status' => 'success'
         ]);
     }
 

@@ -11,11 +11,10 @@ class AuthorController extends Controller
 {
     public function index()
     {
-        $authors = Author::with('books')->get();
+        $authors = Author::with('books')->paginate(15);
 
-        return response()->json([
-            'status'    => 'success',
-            'data'      => AuthorResource::collection($authors)
+        return AuthorResource::collection($authors)->additional([
+            'status' => 'success'
         ]);
     }
 

@@ -29,11 +29,10 @@ class TaskController extends Controller
 
     public function index(Request $request)
     {
-        $tasks = Task::where('user_id', $request->user()->id)->latest()->get();
+        $tasks = Task::where('user_id', $request->user()->id)->latest()->paginate(15);
 
-        return response()->json([
-            'status'    => 'success',
-            'data'      => TaskResource::collection($tasks)
+        return TaskResource::collection($tasks)->additional([
+            'status' => 'success'
         ]);
     }
 

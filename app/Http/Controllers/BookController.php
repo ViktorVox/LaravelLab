@@ -23,11 +23,10 @@ class BookController extends Controller
 
     public function index()
     {
-        $books = Book::with('author')->get();
+        $books = Book::with('author')->paginate(5);
 
-        return response()->json([
-            'status'    => 'success',
-            'data'      => BookResource::collection($books)
+        return BookResource::collection($books)->additional([
+            'status' => 'success'
         ]);
     }
 
