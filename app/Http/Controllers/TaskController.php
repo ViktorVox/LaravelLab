@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -38,9 +39,7 @@ class TaskController extends Controller
 
     public function show(Request $request, Task $task)
     {
-        if ($task->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Доступ запрещен'], 403);
-        }
+        Gate::authorize('view', $task);  
 
         return response()->json([
             'status'    => 'success',
@@ -50,9 +49,7 @@ class TaskController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        if ($task->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Доступ запрещен'], 403);
-        }
+        Gate::authorize('update', $task);
 
         $task->update($request->validated());
 
@@ -64,9 +61,7 @@ class TaskController extends Controller
 
     public function destroy(Request $request, Task $task)
     {
-        if ($task->user_id !== $request->user()->id) {
-            return response()->json(['message' => 'Доступ запрещен'], 403);
-        }
+        Gate::authorize('delete', $task);
 
         $task->delete();
 

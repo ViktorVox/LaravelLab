@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Resources\TicketResource;
@@ -49,6 +50,8 @@ class TicketController extends Controller
     // Админ: Изменить статус заявки
     public function updateStatus(Request $request, Ticket $ticket)
     {
+        Gate::authorize('updateStatus', $ticket);
+
         $request->validate([
             'status' => 'required|in:new,in_progress,resolved' // Жестко ограничиваем статусы
         ]);
